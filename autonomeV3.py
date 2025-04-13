@@ -67,19 +67,19 @@ def comportement_lumiere():
 
         print("Avant :", avant_val, " | Arrière :", arriere_val)
 
-        seuil = 60000  # à ajuster selon ton capteur
+        seuil = 60000  # 
 
         if avant_val > seuil and avant_val > arriere_val:
-            print("🌞 Lumière devant → j'avance")
+            print(" Lumière devant → j'avance")
             avancer(70)
         elif arriere_val > seuil and arriere_val > avant_val:
-            print("🌞 Lumière derrière → je recule")
+            print(" Lumière derrière → je recule")
             reculer(70)
-        elif abs(avant_val - arriere_val) < 2000:
-            print("🔄 Lumière équilibrée → je tourne pour chercher")
+        elif abs(avant_val - arriere_val) < 30000:
+            print(" Lumière équilibrée → je tourne pour chercher")
             tourner_gauche(50)
         else:
-            print("❌ Pas de lumière claire → je reste en place")
+            print(" Pas de lumière claire → je reste en place")
             arret()
 
         sleep(0.3)
