@@ -46,22 +46,22 @@ mot2_cwPin = 19
 mot2_acwPin = 18
 
 # --- Capteurs de lumière ---
-ldr_gauche = ADC(0)  # GP26 = ADC0
-ldr_droite = ADC(2)  # GP28 = ADC2
+ldr_avant = ADC(0)  # GP26 = ADC0
+ldr_arriere = ADC(2)  # GP28 = ADC2
 
 # --- Fonction de recherche de lumière ---
 def rechercher_lumiere():
     while True:
-        val_gauche = ldr_gauche.read_u16()
-        val_droite = ldr_droite.read_u16()
+        val_avant = ldr_avant.read_u16()
+        val_derrière = ldr_arriere.read_u16()
 
-        print("Gauche :", val_gauche, " | Droite :", val_droite)
+        print("devant :", ldr_avant, " | derriere :", ldr_arriere)
 
-        if abs(val_gauche - val_droite) < 2000:
+        if abs(val_avant > val_derrière) :
             print("→ Lumière en face : j'avance")
-            avancer(60)
-        elif val_gauche > val_droite:
-            print("→ Lumière à gauche : je tourne à gauche")
+            avancer(80)
+        elif val_derrière > val_avant:
+            print("→ Lumière derrière : je tourne à gauche")
             tourner_gauche(50)
         else:
             print("→ Lumière à droite : je tourne à droite")
