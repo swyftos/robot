@@ -76,39 +76,35 @@ def comportement_lumiere():
 
             # Décision : avancer / reculer selon intensité lumineuse
             if a > seuil + HYST and a > r:
-                print("→ Lumière devant : j'avance")
+                print("→ Lumière devant ")
                 mot1.forward(70)
                 mot2.forward(70)
 
             elif r > seuil + HYST and r > a:
-                print("→ Lumière derrière : je recule")
+                print("→ Lumière derrière")
                 mot1.backward(70)
                 mot2.backward(70)
 
             # Valeurs proches → avance ou recule selon capteur le plus exposé
             elif abs(a - r) < HYST:
                 if a > r:
-                    print("→ Intensité légèrement plus élevée devant : j'avance")
+                    print("→ Intensité légèrement plus élevée devant ")
                     mot1.forward(50)
                     mot2.forward(50)
                 else:
-                    print("→ Intensité légèrement plus élevée derrière : je recule")
+                    print("→ Intensité légèrement plus élevée derrière")
                     mot1.backward(50)
                     mot2.backward(50)
 
             # Pas de lumière claire → arrêt
             else:
-                print("→ Pas de lumière claire : je m'arrête")
+                print("→ Pas de lumière claire ")
                 mot1.stop()
                 mot2.stop()
 
             sleep_ms(300)
 
-    except KeyboardInterrupt:
-        mot1.stop()
-        mot2.stop()
-        print("Arrêt du programme")
-
+ 
 # --- Lancement ---
 if __name__ == '__main__':
     comportement_lumi
