@@ -1,7 +1,7 @@
 from machine import Pin, PWM, ADC
 from time import sleep
 
-# --- Brochage des moteurs ---
+
 mot1_pwmPIN = 5
 mot1_cwPin = 8
 mot1_acwPin = 9
@@ -10,11 +10,11 @@ mot2_pwmPIN = 27
 mot2_cwPin = 19
 mot2_acwPin = 18
 
-# --- Capteurs de lumière ---
+
 ldr_avant = ADC(0)    # GP26 (ADC0) → LDR avant
 ldr_arriere = ADC(2)  # GP28 (ADC2) → LDR arrière
 
-# --- Fonctions moteurs ---
+
 def avancerMoteur(speed, speedGP, cwGP, acwGP):
     speed = max(0, min(speed, 100))
     Speed = PWM(Pin(speedGP))
@@ -59,7 +59,7 @@ def arret():
     arreter(mot1_cwPin, mot1_acwPin)
     arreter(mot2_cwPin, mot2_acwPin)
 
-# --- Recherche et réaction à la lumière ---
+
 def comportement_lumiere():
     while True:
         avant_val = ldr_avant.read_u16()
@@ -70,16 +70,16 @@ def comportement_lumiere():
         seuil = 60000  # 
 
         if avant_val > seuil and avant_val > arriere_val:
-            print(" Lumière devant → j'avance")
+            print(" Lumière devant")
             avancer(70)
         elif arriere_val > seuil and arriere_val > avant_val:
-            print(" Lumière derrière → je recule")
+            print(" Lumière derrière ")
             reculer(70)
         elif abs(avant_val - arriere_val) < 30000:
-            print(" Lumière équilibrée → je tourne pour chercher")
+            print(" Lumière équilibrée")
             tourner_gauche(50)
         else:
-            print(" Pas de lumière claire → je reste en place")
+            print(" Pas de lumière claire")
             arret()
 
         sleep(0.3)
