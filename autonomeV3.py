@@ -61,28 +61,23 @@ def arret():
 
 
 def comportement_lumiere():
+    seuil_detection = 10000  # Seuil pour détecter "suffisamment" de lumière
     while True:
         avant_val = ldr_avant.read_u16()
         arriere_val = ldr_arriere.read_u16()
 
         print("Avant :", avant_val, " | Arrière :", arriere_val)
 
-        seuil = 60000  # 
-
-        if avant_val > seuil and avant_val > arriere_val:
-            print(" Lumière devant")
+        if avant_val > seuil_detection and avant_val > arriere_val:
+            print(" Lumière devant → j'avance")
             avancer(70)
-        elif arriere_val > seuil and arriere_val > avant_val:
-            print(" Lumière derrière ")
+        elif arriere_val > seuil_detection and arriere_val > avant_val:
+            print(" Lumière derrière → je recule")
             reculer(70)
-        elif abs(avant_val - arriere_val) < 30000:
-            print(" Lumière équilibrée")
-            tourner_gauche(50)
         else:
-            print(" Pas de lumière claire")
-            arret()
+            print(" Pas assez de lumière → je cherche")
+            tourner_gauche(50)
 
         sleep(0.3)
-
 # --- Lancement du programme ---
 comportement_lumiere()
