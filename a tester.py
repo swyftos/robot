@@ -1,4 +1,8 @@
 
+
+from machine import Pin, PWM, ADC
+from time import sleep_ms
+
 # --- Classe Motor ---
 class Motor:
     def __init__(self, pwm_pin, cw_pin, acw_pin, freq=50):
@@ -51,15 +55,16 @@ def comportement_lumiere():
     seuil = ((min_a + max_a) + (min_r + max_r)) // 4
     print(f"Seuil calculé : {seuil}")
 
-    prev_avant   = None
+    prev_avant = None
     prev_arriere = None
 
     try:
         while True:
+            # Lecture brute
             raw_a = ldr_avant.read_u16()
             raw_r = ldr_arriere.read_u16()
 
-            # lissage
+            # Lissage exponentiel
             if prev_avant is None:
                 prev_avant, prev_arriere = raw_a, raw_r
             else:
@@ -69,33 +74,41 @@ def comportement_lumiere():
             a, r = prev_avant, prev_arriere
             print(f"Avant: {a} | Arrière: {r}")
 
-            # décision avec hystérésis
+            # Décision : avancer / reculer selon intensité lumineuse
             if a > seuil + HYST and a > r:
                 print("→ Lumière devant : j'avance")
-                mot1.forward(70); mot2.forward(70)
+                mot1.forward(70)
+                mot2.forward(70)
 
             elif r > seuil + HYST and r > a:
                 print("→ Lumière derrière : je recule")
-                mot1.backward(70); mot2.backward(70)
+                mot1.backward(70)
+                mot2.backward(70)
 
-            elif abs(a - r) > HYST:
-                if a < r:
-                    print("→ Tourne à gauche")
-                    mot1.stop(); mot2.forward(50)
+            # Valeurs proches → avance ou recule selon capteur le plus exposé
+            elif abs(a - r) < HYST:
+                if a > r:
+                    print("→ Intensité légèrement plus élevée devant : j'avance")
+                    mot1.forward(50)
+                    mot2.forward(50)
                 else:
-                    print("→ Tourne à droite")
-                    mot1.forward(50); mot2.stop()
+                    print("→ Intensité légèrement plus élevée derrière : je recule")
+                    mot1.backward(50)
+                    mot2.backward(50)
 
+            # Pas de lumière claire → arrêt
             else:
                 print("→ Pas de lumière claire : je m'arrête")
-                mot1.stop(); mot2.stop()
+                mot1.stop()
+                mot2.stop()
 
             sleep_ms(300)
 
     except KeyboardInterrupt:
-        mot1.stop(); mot2.stop()
+        mot1.stop()
+        mot2.stop()
         print("Arrêt du programme")
 
 # --- Lancement ---
 if __name__ == '__main__':
-    comportement_lumiere()
+    comportement_lumi
