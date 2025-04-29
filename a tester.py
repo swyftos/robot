@@ -1,7 +1,7 @@
 from machine import Pin, PWM, ADC
 from time import sleep_ms
 
-# --- Classe Motor ---
+
 class Motor:
     def __init__(self, pwm_pin, cw_pin, acw_pin, freq=50):
         self.pwm = PWM(Pin(pwm_pin))
@@ -28,24 +28,24 @@ class Motor:
         self.acw.value(0)
         self.set_speed(0)
 
-# --- Brochage et objets moteurs ---
+#  Brochage et objets moteurs 
 mot1 = Motor(pwm_pin=5, cw_pin=8, acw_pin=9)
 mot2 = Motor(pwm_pin=27, cw_pin=19, acw_pin=18)
 
-# --- Capteurs LDR ---
+#  Capteurs LDR 
 ldr_avant   = ADC(0)   # GP26
 ldr_arriere = ADC(2)   # GP28
 
-# --- Paramètres ---
+#  Paramètres 
 ALPHA = 0.2    # lissage exponentiel
 HYST  = 2000   # hystérésis
 
-# --- Calibration LDR ---
+#  Calibration LDR 
 def calibrate(adc, samples=50):
     vals = [adc.read_u16() for _ in range(samples)]
     return min(vals), max(vals)
 
-# --- Boucle principale ---
+#  Boucle principale 
 def comportement_lumiere():
     print("--- Calibration des LDR ---")
     min_a, max_a = calibrate(ldr_avant)
