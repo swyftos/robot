@@ -1,7 +1,7 @@
 from machine import Pin, PWM, ADC
 from time import sleep
 
-
+# --- Brochage des moteurs ---
 mot1_pwmPIN = 5
 mot1_cwPin = 8
 mot1_acwPin = 9
@@ -10,11 +10,11 @@ mot2_pwmPIN = 27
 mot2_cwPin = 19
 mot2_acwPin = 18
 
-
+# --- Capteurs de lumière ---
 ldr_avant = ADC(0)    # GP26 (ADC0) → LDR avant
 ldr_arriere = ADC(2)  # GP28 (ADC2) → LDR arrière
 
-
+# --- Fonctions moteurs ---
 def avancerMoteur(speed, speedGP, cwGP, acwGP):
     speed = max(0, min(speed, 100))
     Speed = PWM(Pin(speedGP))
@@ -59,25 +59,27 @@ def arret():
     arreter(mot1_cwPin, mot1_acwPin)
     arreter(mot2_cwPin, mot2_acwPin)
 
-
+# --- Recherche et réaction à la lumière ---
 def comportement_lumiere():
-    seuil_detection = 30000  # Seuil pour détecter "suffisamment" de lumière
+    seuil_detection = 30000  # Seuil minimal pour considérer que la lumière est suffisante
     while True:
         avant_val = ldr_avant.read_u16()
         arriere_val = ldr_arriere.read_u16()
 
         print("Avant :", avant_val, " | Arrière :", arriere_val)
 
-        if avant_val > seuil_detection and avant_val > arriere_val:
-            print(" Lumière devant")
-            avancer(70)
-        elif arriere_val > seuil_detection and arriere_val > avant_val:
-            print(" Lumière derrière")
-            reculer(70)
-        else:
-            print(" Pas assez de lumière")
+        if avant_val < seuil_detection and arriere_val < seuil_detection:
+            print(" Lumière trop basse → je cherche (tourner)")
             tourner_gauche(50)
+        else:
+            if avant_val > arriere_val:
+                print(" Lumière devant → j'avance")
+                avancer(70)
+            else:
+                print(" Lumière derrière → je recule")
+                reculer(70)
 
         sleep(0.3)
+
 # --- Lancement du programme ---
 comportement_lumiere()
