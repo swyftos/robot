@@ -11,8 +11,8 @@ mot2_cwPin = 19
 mot2_acwPin = 18
 
 # --- Capteurs de lumière ---
-ldr_avant = ADC(0)    # GP26 (ADC0) → LDR avant
-ldr_arriere = ADC(2)  # GP28 (ADC2) → LDR arrière
+ldr_avant = ADC(2)    # GP26 (ADC0) → LDR avant
+ldr_arriere = ADC(0)  # GP28 (ADC2) → LDR arrière
 
 # --- Fonctions moteurs ---
 def avancerMoteur(speed, speedGP, cwGP, acwGP):
@@ -61,7 +61,7 @@ def arret():
 
 # --- Recherche et réaction à la lumière ---
 def comportement_lumiere():
-    seuil_detection = 30000  
+    seuil_detection = 30000  # Seuil minimal pour considérer que la lumière est suffisante
     while True:
         avant_val = ldr_avant.read_u16()
         arriere_val = ldr_arriere.read_u16()
@@ -69,17 +69,18 @@ def comportement_lumiere():
         print("Avant :", avant_val, " | Arrière :", arriere_val)
 
         if avant_val < seuil_detection and arriere_val < seuil_detection:
-            print(" Lumière trop basse")
-            tourner_gauche(50)
+            print(" Lumière trop basse → je cherche (tourner)")
+            tourner_gauche(20)
         else:
             if avant_val > arriere_val:
-                print(" Lumière devant")
-                avancer(70)
+                print(" Lumière devant → j'avance")
+                avancer(50)
             else:
-                print(" Lumière derrière")
-                reculer(70)
+                print(" Lumière derrière → je recule")
+                reculer(50)
 
         sleep(0.3)
 
 # --- Lancement du programme ---
 comportement_lumiere()
+
