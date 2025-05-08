@@ -25,7 +25,7 @@ void loop() {
   float tension1 = val1 * 5.0 / 1023.0;
   float tension2 = val2 * 5.0 / 1023.0;
 
-  // Affichage sur l'écran
+  //  sur l'écran
   lcd.setCursor(0, 0);
   lcd.print("A0:");
   lcd.print(val1);
@@ -40,7 +40,7 @@ void loop() {
   lcd.print(tension2, 1);
   lcd.print("V ");
 
-  // Clignotement LED 1 et LED 2 en opposition
+  // Clignotement LED
   digitalWrite(led1, HIGH);
   digitalWrite(led2, LOW);
   delay(250);
