@@ -3,29 +3,32 @@
 // LCD : RS, E, D4, D5, D6, D7
 LiquidCrystal lcd(8, 9, 10, 11, 12, 13);
 
+// Broches capteurs
 const int capteur1 = A0;
 const int capteur2 = A1;
-const int led1 = 6; // LED 1
-const int led2 = 7; // LED 2
+
+// Broches LED
+const int ledBas = 7;   // led bleu s'allume quand capteur bas > haut
+const int ledHaut = 6;  // led rouge s'alllume quand capteur haut > bas
+
+
 
 void setup() {
   lcd.begin(16, 2);
   lcd.clear();
-  lcd.setCursor(0, 0);
-  lcd.print("Capteurs Lumiere");
 
-  pinMode(led1, OUTPUT);
-  pinMode(led2, OUTPUT);
+  pinMode(ledBas, OUTPUT);
+  pinMode(ledHaut, OUTPUT);
 }
 
 void loop() {
-  int val1 = analogRead(capteur1);
-  int val2 = analogRead(capteur2);
+  int val1 = analogRead(capteur1); // A0
+  int val2 = analogRead(capteur2); // A1
 
   float tension1 = val1 * 5.0 / 1023.0;
   float tension2 = val2 * 5.0 / 1023.0;
 
-  //  sur l'écran
+  // Affichage LCD
   lcd.setCursor(0, 0);
   lcd.print("A0:");
   lcd.print(val1);
@@ -40,11 +43,18 @@ void loop() {
   lcd.print(tension2, 1);
   lcd.print("V ");
 
-  // Clignotement LED
-  digitalWrite(led1, HIGH);
-  digitalWrite(led2, LOW);
-  delay(250);
-  digitalWrite(led1, LOW);
-  digitalWrite(led2, HIGH);
-  delay(250);
+  
+  if (val2 < val1) {
+    digitalWrite(ledBas, HIGH);
+  } else {
+    digitalWrite(ledBas, LOW);
+  }
+
+  if (val2 > val1) {
+    digitalWrite(ledHaut, HIGH);
+  } else {
+    digitalWrite(ledHaut, LOW);
+  }
+
+  delay(200);
 }
