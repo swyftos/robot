@@ -59,7 +59,7 @@ def arret():
     arreter(mot1_cwPin, mot1_acwPin)
     arreter(mot2_cwPin, mot2_acwPin)
 
-# --- Recherche et réaction à la lumière ---
+#  Recherche et réaction à la lumière 
 def comportement_lumiere():
     seuil_detection = 30000  # Seuil minimal pour considérer que la lumière est suffisante
     while True:
